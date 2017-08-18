@@ -1,12 +1,107 @@
-﻿<Window x:Class="JackTiming.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:JackTiming"
-        mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
-    <Grid>
-        
-    </Grid>
+﻿<Window
+    x:Class="JackTiming.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:cmd="http://www.galasoft.ch/mvvmlight"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+    xmlns:local="clr-namespace:JackTiming"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    x:Name="JackWindow"
+    Title="{Binding ApplicationTitle}"
+    Width="525"
+    Height="350"
+    DataContext="{Binding MainVM, Source={StaticResource Locator}}"
+    Loaded="MainWindow_OnLoaded"
+    WindowStartupLocation="CenterScreen"
+    mc:Ignorable="d">
+
+    <DockPanel>
+        <Menu
+            Background="#FFA9D1F4"
+            DockPanel.Dock="Top"
+            IsMainMenu="True">
+            <MenuItem Header="_File">
+
+                <MenuItem Command="{Binding NewFileCommand}" Header="_New" />
+                <MenuItem Command="{Binding OpenFileCommand}" Header="_Open" />
+                <MenuItem Command="{Binding SaveCommand}" Header="_Save" />
+                <MenuItem Command="{Binding SaveAsCommand}" Header="Save _As" />
+                <Separator />
+                <MenuItem Command="{Binding ExportImageCommand}" Header="_Export Image" />
+                <Separator />
+                <MenuItem
+                    Command="{Binding CloseWindowCommand, Mode=OneWay}"
+                    CommandParameter="{Binding ElementName=JackWindow}"
+                    Header="_Exit" />
+            </MenuItem>
+            <MenuItem Header="_Edit">
+                <MenuItem Command="Undo" />
+                <MenuItem Command="Redo" />
+                <Separator />
+                <MenuItem Command="Cut" />
+                <MenuItem Command="Copy" />
+                <MenuItem Command="Paste" />
+                <MenuItem Command="SelectAll" />
+            </MenuItem>
+            <MenuItem Header="_Diagram">
+                <MenuItem Command="{Binding CopyImageCommand}" Header="_Copy Image" />
+            </MenuItem>
+        </Menu>
+
+        <StatusBar DockPanel.Dock="Bottom">
+            <TextBlock x:Name="txtStatus" Text="{Binding EditStatusString, UpdateSourceTrigger=PropertyChanged}" />
+            <Separator />
+            <TextBlock x:Name="txtFileName" Text="{Binding FileName}" />
+        </StatusBar>
+
+        <TextBlock
+            x:Name="txtCharacters"
+            MinWidth="140"
+            Margin="4"
+            DockPanel.Dock="Right"
+            FontFamily="Consolas"
+            Text="{Binding TimingCharacters}" />
+
+        <Grid MinWidth="100">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" MinHeight="100" />
+                <RowDefinition Height="5" />
+                <RowDefinition Height="*" MinHeight="100" />
+            </Grid.RowDefinitions>
+
+            <ScrollViewer Grid.Row="0">
+                <Canvas
+                    x:Name="myCanvas"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Background="White" />
+
+                <!--<local:CanvasAutoSize
+                    x:Name="myCanvas"
+                    MinHeight="100"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top" />-->
+            </ScrollViewer>
+
+            <GridSplitter
+                Grid.Row="1"
+                Height="5"
+                HorizontalAlignment="Stretch" />
+
+            <TextBox
+                x:Name="txtData"
+                Grid.Row="2"
+                MinHeight="00"
+                Margin="5"
+                AcceptsReturn="True"
+                KeyUp="TxtData_OnKeyUp"
+                Text="{Binding TimingData, UpdateSourceTrigger=PropertyChanged}"
+                TextWrapping="Wrap"
+                VerticalScrollBarVisibility="Auto" />
+
+
+        </Grid>
+
+    </DockPanel>
 </Window>
