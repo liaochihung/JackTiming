@@ -76,10 +76,16 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="CanvasAutoSize.cs" />
+    <Compile Include="Helper\DrawParam.cs" />
+    <Compile Include="Helper\GraphicHelper.cs" />
+    <Compile Include="Helper\MarkerDrawer.cs" />
     <Compile Include="MessageInfrastructure\MessageToken.cs" />
-    <Compile Include="ViewModel\DialogService.cs" />
-    <Compile Include="ViewModel\IDialogService.cs" />
+    <Compile Include="Helper\TimingCharacterDrawer.cs" />
+    <Compile Include="Helper\DialogService.cs" />
+    <Compile Include="Helper\IDialogService.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
+    <Compile Include="Helper\TimingMap.cs" />
+    <Compile Include="Helper\TimingMapParser.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

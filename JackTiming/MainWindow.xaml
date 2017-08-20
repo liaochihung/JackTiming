@@ -82,6 +82,7 @@
                     MinHeight="100"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top" />-->
+
             </ScrollViewer>
 
             <GridSplitter
@@ -99,7 +100,6 @@
                 Text="{Binding TimingData, UpdateSourceTrigger=PropertyChanged}"
                 TextWrapping="Wrap"
                 VerticalScrollBarVisibility="Auto" />
-
 
         </Grid>
 

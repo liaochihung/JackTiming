@@ -44,8 +44,10 @@ namespace JackTiming.ViewModel
             }
 
             ApplicationTitle = nameof(JackTiming);
+
             FileName = InitFileName;
             TimingData = InitTimingData;
+            MarkerData = InitMarkerData;
 
             EditStatusString = EditStatus.Unchanged.ToString();
 
@@ -111,28 +113,17 @@ namespace JackTiming.ViewModel
 
             SaveCommand = new RelayCommand(() =>
             {
-                File.WriteAllText(FilePath, TimingData); EditStatus = EditStatus.Unchanged;
-            });
-
-            SaveAsCommand = new RelayCommand(() =>
-            {
-                var fn = _dialogService.SaveFileDialog();
-                if (fn != string.Empty)
+                if (FilePath == null || !File.Exists(FilePath))
                 {
-                    File.WriteAllText(fn, TimingData);
-
-                    _fullPathFileName = fn;
-
-                    FilePath = System.IO.Path.GetDirectoryName(_fullPathFileName);
-                    FileName = System.IO.Path.GetFileName(_fullPathFileName);
-
-                    EditStatus = EditStatus.Unchanged;
-                }
-                else
-                {
+                    SaveAs();
                     return;
                 }
+
+                File.WriteAllText(FilePath, TimingData);
+                EditStatus = EditStatus.Unchanged;
             });
+
+            SaveAsCommand = new RelayCommand(SaveAs);
 
             CopyImageCommand = new RelayCommand(() =>
             {
@@ -166,6 +157,26 @@ namespace JackTiming.ViewModel
             UpdateTimingDiagram();
         }
 
+        private void SaveAs()
+        {
+            var fn = _dialogService.SaveFileDialog();
+            if (fn != string.Empty)
+            {
+                File.WriteAllText(fn, TimingData);
+
+                _fullPathFileName = fn;
+
+                FilePath = System.IO.Path.GetDirectoryName(_fullPathFileName);
+                FileName = System.IO.Path.GetFileName(_fullPathFileName);
+
+                EditStatus = EditStatus.Unchanged;
+            }
+            else
+            {
+                return;
+            }
+        }
+
         private void UpdateTimingDiagram()
         {
             Messenger.Default.Send(new MessageToken()
@@ -175,8 +186,9 @@ namespace JackTiming.ViewModel
             });
         }
 
-        private const string InitTimingData = "Test=__~~__~~__";
+        private const string InitTimingData = "Marker=  | |  \r\nTest=__~~__~~__";
         private const string InitFileName = "untitled.atd";
+        private const string InitMarkerData = "  |    |";
 
         private EditStatus _editStatus = EditStatus.Unchanged;
 
@@ -196,6 +208,7 @@ namespace JackTiming.ViewModel
 
         public string TimingData { get; set; }
         public string TimingCharacters { get; set; }
+        public string MarkerData { get; set; }
 
         // lazy for create converter :)
         public string EditStatusString { get; set; }
@@ -214,44 +227,8 @@ namespace JackTiming.ViewModel
 
         public RelayCommand<Window> CloseWindowCommand { get; private set; }
 
-        private List<string> _lines;
-
         private bool _isFileModified;
         private string _fullPathFileName;
-    }
-
-    public static class TimingMapParser
-    {
-        public static List<TimingMap> Parse(string datas)
-        {
-            var lines = new List<string>(datas.Split(
-                new string[] { "\r\n" },
-                StringSplitOptions.RemoveEmptyEntries));
-
-            var data = new List<TimingMap>();
-            foreach (var line in lines)
-            {
-                var l = line.Split('=').Length;
-                if (l <= 1)
-                    continue;
-
-                var map = new TimingMap()
-                {
-                    Symbol = line.Split('=')[0],
-                    Timing = line.Split('=')[1]
-                };
-
-                data.Add(map);
-            }
-
-            return data;
-        }
-    }
-
-    public class TimingMap
-    {
-        public string Symbol { get; set; }
-        public string Timing { get; set; }
     }
 
     public enum EditStatus
