@@ -14,6 +14,7 @@ namespace JackTiming.ViewModel
     public class TimingCharacterElement
     {
         public List<MyLine> Lines { get; set; }
+        public string Char { get; set; }
 
         private Point _topLeftPoint;
         public Point TopLeftPoint
@@ -37,6 +38,7 @@ namespace JackTiming.ViewModel
         {
             TopLeftPoint = new Point(0, 0);
             Lines = new List<MyLine>();
+            Char = string.Empty;
         }
     }
 

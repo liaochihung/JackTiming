@@ -174,10 +174,17 @@ namespace JackTiming.ViewModel
                     break;
             }
 
+            TimingCharacterElement item = null;
+            item =
+                new TimingCharacterElement
+                {
+                    Lines = new List<MyLine>()
+                };
+
             if (hasSpecialCharacter)
             {
-                // we won't actually draw letter but lines here
-                if (ch == ' ' || Char.IsLetterOrDigit(ch))
+                var isLetter = Char.IsLetterOrDigit(ch);
+                if (ch == ' ' || isLetter)
                 {
                     myLine1 = new MyLine()
                     {
@@ -189,20 +196,16 @@ namespace JackTiming.ViewModel
                         StartPoint = new Point(0, DrawParam.UnitY),
                         EndPoint = new Point(DrawParam.UnitX, DrawParam.UnitY)
                     };
+
+                    if (isLetter)
+                    {
+                        item.Char = ch.ToString();
+                    }
                 }
             }
 
-            TimingCharacterElement item = null;
             if (myLine1 != null)
-            {
-                item =
-                    new TimingCharacterElement
-                    {
-                        Lines = new List<MyLine>()
-                    };
-
                 item.Lines.Add(myLine1);
-            }
 
             if (myLine2 != null)
                 item.Lines.Add(myLine2);

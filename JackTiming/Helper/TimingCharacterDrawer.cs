@@ -83,6 +83,7 @@ namespace JackTiming
 
         public void Draw()
         {
+            // draw symbol
             GraphicHelper.DrawText(
                 Canvas,
                 _timingMap.Symbol,
@@ -90,12 +91,14 @@ namespace JackTiming
                 14,
                 Brushes.Green);
 
+            // draw elements
             var xIndex = 0;
             foreach (var element in _timingMap.Elements)
             {
                 if (element == null)
                     continue;
 
+                // re calc reference point
                 element.TopLeftPoint = new Point(
                     DrawParam.StartX + (xIndex * DrawParam.UnitX),
                     DrawParam.StartY + (_lineIndex * DrawParam.UnitY));
@@ -114,6 +117,15 @@ namespace JackTiming
                         X2 = myLine.EndPoint.X,
                         Y2 = myLine.EndPoint.Y
                     };
+
+                    if(element.Char != string.Empty)
+                        GraphicHelper.DrawText(
+                            Canvas,
+                            element.Char,
+                            new Point(element.TopLeftPoint.X,
+                                element.TopLeftPoint.Y),
+                            14,
+                            Brushes.Black);
 
                     Canvas.Children.Add(line);
                 }
