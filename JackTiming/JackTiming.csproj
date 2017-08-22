@@ -76,6 +76,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="CanvasAutoSize.cs" />
+    <Compile Include="DrawOption.xaml.cs">
+      <DependentUpon>DrawOption.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Helper\DrawParam.cs" />
     <Compile Include="Helper\GraphicHelper.cs" />
     <Compile Include="Helper\MarkerDrawer.cs" />
@@ -87,6 +90,10 @@
     <Compile Include="Helper\TimingMap.cs" />
     <Compile Include="Helper\TimingMapParser.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
+    <Page Include="DrawOption.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

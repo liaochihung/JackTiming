@@ -43,7 +43,7 @@ namespace JackTiming.ViewModel
                 // Code runs "for real"
             }
 
-            ApplicationTitle = nameof(JackTiming);
+            ApplicationTitle = "JackTiming - waveform editor, just like AndyTiming.";
 
             FileName = InitFileName;
             TimingData = InitTimingData;
@@ -113,13 +113,13 @@ namespace JackTiming.ViewModel
 
             SaveCommand = new RelayCommand(() =>
             {
-                if (FilePath == null || !File.Exists(FilePath))
+                if (!File.Exists(_fullPathFileName))
                 {
                     SaveAs();
                     return;
                 }
 
-                File.WriteAllText(FilePath, TimingData);
+                File.WriteAllText(_fullPathFileName, TimingData);
                 EditStatus = EditStatus.Unchanged;
             });
 
@@ -152,6 +152,15 @@ namespace JackTiming.ViewModel
                         return;
                 }
                 window.Close();
+            });
+
+            OpenDrawOptionWindowCommand=new RelayCommand<Window>((mainWindow) =>
+            {
+                var window = new DrawOption();
+                window.Owner = mainWindow;
+                window.Topmost = true;
+                window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+                window.Show();
             });
 
             UpdateTimingDiagram();
@@ -226,6 +235,7 @@ namespace JackTiming.ViewModel
         public RelayCommand AddCommand { get; private set; }
 
         public RelayCommand<Window> CloseWindowCommand { get; private set; }
+        public RelayCommand<Window> OpenDrawOptionWindowCommand { get; private set; }
 
         private bool _isFileModified;
         private string _fullPathFileName;

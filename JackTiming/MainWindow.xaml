@@ -46,6 +46,10 @@
             </MenuItem>
             <MenuItem Header="_Diagram">
                 <MenuItem Command="{Binding CopyImageCommand}" Header="_Copy Image" />
+                <MenuItem
+                    Command="{Binding OpenDrawOptionWindowCommand, Mode=OneWay}"
+                    CommandParameter="{Binding ElementName=JackWindow}"
+                    Header="_Draw Option" />
             </MenuItem>
         </Menu>
 

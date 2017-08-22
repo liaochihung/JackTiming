@@ -1,0 +1,139 @@
+﻿<Window
+    x:Class="JackTiming.DrawOption"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:JackTiming"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="DrawOption"
+    Width="292.67"
+    Height="176.963"
+    mc:Ignorable="d">
+    <Window.Resources>
+        <local:DrawParamDto x:Key="ParamDto" />
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+
+        <TextBlock
+            Grid.Row="0"
+            Grid.Column="0"
+            Margin="5"
+            VerticalAlignment="Center"
+            Text="Unit of X" />
+        <Slider
+            x:Name="SliderUnitOfX"
+            Grid.Row="0"
+            Grid.Column="1"
+            MinWidth="120"
+            Margin="5"
+            Maximum="30"
+            Minimum="2"
+            TickFrequency="1"
+            TickPlacement="BottomRight"
+            ValueChanged="Slider_OnValueChanged"
+            Value="{Binding Source={x:Static local:DrawParamDto.Instance}, Path=UnitX}" />
+
+        <TextBox
+            Grid.Column="2"
+            MinWidth="30"
+            Margin="5"
+            VerticalAlignment="Center"
+            Text="{Binding ElementName=SliderUnitOfX, Path=Value, UpdateSourceTrigger=PropertyChanged}" />
+
+        <TextBlock
+            Grid.Row="1"
+            Grid.Column="0"
+            Margin="5"
+            VerticalAlignment="Center"
+            Text="Unit of Y" />
+        <Slider
+            x:Name="SliderUnitOfY"
+            Grid.Row="1"
+            Grid.Column="1"
+            MinWidth="120"
+            Margin="5"
+            Maximum="100"
+            Minimum="10"
+            TickFrequency="4"
+            TickPlacement="BottomRight"
+            ValueChanged="Slider_OnValueChanged"
+            Value="{Binding Source={x:Static local:DrawParamDto.Instance}, Path=UnitY}" />
+
+        <TextBox
+            Grid.Row="1"
+            Grid.Column="2"
+            MinWidth="40"
+            Margin="5"
+            VerticalAlignment="Center"
+            Text="{Binding ElementName=SliderUnitOfY, Path=Value, UpdateSourceTrigger=PropertyChanged}" />
+
+        <TextBlock
+            Grid.Row="2"
+            Grid.Column="0"
+            Margin="5"
+            VerticalAlignment="Center"
+            Text="Vertical Space" />
+
+        <Slider
+            x:Name="SliderVerticalSpace"
+            Grid.Row="2"
+            Grid.Column="1"
+            MinWidth="120"
+            Margin="5"
+            Maximum="30"
+            Minimum="2"
+            TickFrequency="1"
+            TickPlacement="BottomRight"
+            ValueChanged="Slider_OnValueChanged"
+            Value="{Binding Source={x:Static local:DrawParamDto.Instance}, Path=VerticalSpace}" />
+
+        <TextBox
+            Grid.Row="2"
+            Grid.Column="2"
+            MinWidth="30"
+            Margin="5"
+            VerticalAlignment="Center"
+            Text="{Binding ElementName=SliderVerticalSpace, Path=Value, UpdateSourceTrigger=PropertyChanged}" />
+        <TextBlock
+            Grid.Row="3"
+            Grid.Column="0"
+            Margin="5"
+            VerticalAlignment="Center"
+            Text="Mark Height" />
+
+        <Slider
+            x:Name="SliderMarkHeight"
+            Grid.Row="3"
+            Grid.Column="1"
+            MinWidth="120"
+            Margin="5"
+            Maximum="40"
+            Minimum="6"
+            TickFrequency="2"
+            TickPlacement="BottomRight"
+            ValueChanged="Slider_OnValueChanged"
+            Value="{Binding Source={x:Static local:DrawParamDto.Instance}, Path=MarkHeight}" />
+
+        <TextBox
+            Grid.Row="3"
+            Grid.Column="2"
+            MinWidth="30"
+            Margin="5"
+            VerticalAlignment="Center"
+            Text="{Binding ElementName=SliderMarkHeight, Path=Value, UpdateSourceTrigger=PropertyChanged}" />
+
+    </Grid>
+</Window>
