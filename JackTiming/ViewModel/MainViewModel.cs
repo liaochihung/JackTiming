@@ -27,7 +27,16 @@ namespace JackTiming.ViewModel
     /// </summary>
     public class MainViewModel : ViewModelBase
     {
+        private const string InitFileName = "untitled.atd";
+        private const string InitMarkerData = "  |    |";
+        private const string InitTimingData = "Marker=  | |  \r\nTest=__~~__~~__";
         private IDialogService _dialogService;
+
+        private EditStatus _editStatus = EditStatus.Unchanged;
+
+        private string _fileNameFullPath;
+
+        private bool _isFileModified;
 
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
@@ -54,7 +63,8 @@ namespace JackTiming.ViewModel
             _dialogService = dialogService;
 
             TimingCharacters =
-                " Characters " + Environment.NewLine + Environment.NewLine +
+                " Characters " + Environment.NewLine +
+                Environment.NewLine +
                 " - = Tristate" + Environment.NewLine +
                 " ~ = Hi edge" + Environment.NewLine +
                 " _ = Lo edge" + Environment.NewLine +
@@ -74,12 +84,6 @@ namespace JackTiming.ViewModel
                     EditStatus = EditStatus.Modified;
             });
 
-            // doesn't work!
-            //TestDialogServiceCommand = new RelayCommand(() =>
-            //{
-            //    dialogService.ShowInfo("test", "title");
-            //});
-
             NewFileCommand = new RelayCommand(() =>
             {
                 if (EditStatus == EditStatus.Unchanged)
@@ -98,13 +102,11 @@ namespace JackTiming.ViewModel
 
             OpenFileCommand = new RelayCommand(() =>
             {
-                _fullPathFileName = _dialogService.OpenFileDialog(".\\");
-                if (_fullPathFileName == string.Empty)
+                FileNameFullPath = _dialogService.OpenFileDialog(".\\");
+                if (FileNameFullPath == string.Empty)
                     return;
 
-                TimingData = File.ReadAllText(_fullPathFileName);
-                FilePath = System.IO.Path.GetDirectoryName(_fullPathFileName);
-                FileName = System.IO.Path.GetFileName(_fullPathFileName);
+                TimingData = File.ReadAllText(FileNameFullPath);
 
                 UpdateTimingDiagram();
 
@@ -113,13 +115,13 @@ namespace JackTiming.ViewModel
 
             SaveCommand = new RelayCommand(() =>
             {
-                if (!File.Exists(_fullPathFileName))
+                if (!File.Exists(FileNameFullPath))
                 {
                     SaveAs();
                     return;
                 }
 
-                File.WriteAllText(_fullPathFileName, TimingData);
+                File.WriteAllText(FileNameFullPath, TimingData);
                 EditStatus = EditStatus.Unchanged;
             });
 
@@ -139,67 +141,44 @@ namespace JackTiming.ViewModel
                 Messenger.Default.Send(new MessageToken()
                 {
                     TokenType = MessageTokenType.SaveBitmap,
-                    Message = System.IO.Path.ChangeExtension(_fullPathFileName, ".png")
+                    Message = System.IO.Path.ChangeExtension(FileNameFullPath, ".png")
                 });
             });
 
             CloseWindowCommand = new RelayCommand<Window>((window) =>
             {
-                if (EditStatus == EditStatus.Modified)
-                {
-                    if (_dialogService.ShowQuestion("File has been modified, are you sure to exit?",
-                            "File modified.") == false)
-                        return;
-                }
+                if (EditStatus == EditStatus.Unchanged)
+                    window.Close();
+
+                if (!_dialogService.ShowQuestion("File has been modified, are you sure to exit?",
+                        "File modified."))
+                    return;
+
                 window.Close();
             });
 
-            OpenDrawOptionWindowCommand=new RelayCommand<Window>((mainWindow) =>
+            OpenDrawOptionWindowCommand = new RelayCommand<Window>((mainWindow) =>
             {
-                var window = new DrawOption();
-                window.Owner = mainWindow;
-                window.Topmost = true;
-                window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+                var window = new DrawOption
+                {
+                    Owner = mainWindow,
+                    Topmost = true,
+                    WindowStartupLocation = WindowStartupLocation.CenterOwner
+                };
+
                 window.Show();
             });
 
             UpdateTimingDiagram();
         }
 
-        private void SaveAs()
-        {
-            var fn = _dialogService.SaveFileDialog();
-            if (fn != string.Empty)
-            {
-                File.WriteAllText(fn, TimingData);
+        public RelayCommand AddCommand { get; private set; }
 
-                _fullPathFileName = fn;
+        public string ApplicationTitle { get; set; }
 
-                FilePath = System.IO.Path.GetDirectoryName(_fullPathFileName);
-                FileName = System.IO.Path.GetFileName(_fullPathFileName);
+        public RelayCommand<Window> CloseWindowCommand { get; private set; }
 
-                EditStatus = EditStatus.Unchanged;
-            }
-            else
-            {
-                return;
-            }
-        }
-
-        private void UpdateTimingDiagram()
-        {
-            Messenger.Default.Send(new MessageToken()
-            {
-                TokenType = MessageTokenType.UpdateTimingDiagram,
-                Message = null
-            });
-        }
-
-        private const string InitTimingData = "Marker=  | |  \r\nTest=__~~__~~__";
-        private const string InitFileName = "untitled.atd";
-        private const string InitMarkerData = "  |    |";
-
-        private EditStatus _editStatus = EditStatus.Unchanged;
+        public RelayCommand CopyImageCommand { get; private set; }
 
         public EditStatus EditStatus
         {
@@ -211,39 +190,66 @@ namespace JackTiming.ViewModel
             }
         }
 
-        public string ApplicationTitle { get; set; }
+        //  too lazy for create converter :)
+        public string EditStatusString { get; set; }
+
+        public RelayCommand ExportImageCommand { get; private set; }
+
         public string FileName { get; private set; }
+
+        public string FileNameFullPath
+        {
+            get { return _fileNameFullPath; }
+            set
+            {
+                _fileNameFullPath = value;
+
+                FilePath = System.IO.Path.GetDirectoryName(_fileNameFullPath);
+                FileName = System.IO.Path.GetFileName(_fileNameFullPath);
+            }
+        }
+
         public string FilePath { get; private set; }
 
-        public string TimingData { get; set; }
-        public string TimingCharacters { get; set; }
         public string MarkerData { get; set; }
 
-        // lazy for create converter :)
-        public string EditStatusString { get; set; }
+        public RelayCommand NewFileCommand { get; private set; }
+
+        public RelayCommand<Window> OpenDrawOptionWindowCommand { get; private set; }
+
+        public RelayCommand OpenFileCommand { get; private set; }
+
+        public RelayCommand SaveAsCommand { get; private set; }
+
+        public RelayCommand SaveCommand { get; private set; }
 
         public RelayCommand TestDialogServiceCommand { get; private set; }
 
-        public RelayCommand NewFileCommand { get; private set; }
-        public RelayCommand OpenFileCommand { get; private set; }
-        public RelayCommand SaveCommand { get; private set; }
-        public RelayCommand SaveAsCommand { get; private set; }
+        public string TimingCharacters { get; set; }
 
-        public RelayCommand ExportImageCommand { get; private set; }
-        public RelayCommand CopyImageCommand { get; private set; }
+        public string TimingData { get; set; }
 
-        public RelayCommand AddCommand { get; private set; }
+        private void SaveAs()
+        {
+            var fn = _dialogService.SaveFileDialog();
 
-        public RelayCommand<Window> CloseWindowCommand { get; private set; }
-        public RelayCommand<Window> OpenDrawOptionWindowCommand { get; private set; }
+            if (fn == string.Empty)
+                return;
 
-        private bool _isFileModified;
-        private string _fullPathFileName;
-    }
+            File.WriteAllText(fn, TimingData);
 
-    public enum EditStatus
-    {
-        Modified,
-        Unchanged
+            FileNameFullPath = fn;
+
+            EditStatus = EditStatus.Unchanged;
+        }
+
+        private void UpdateTimingDiagram()
+        {
+            Messenger.Default.Send(new MessageToken()
+            {
+                TokenType = MessageTokenType.UpdateTimingDiagram,
+                Message = null
+            });
+        }
     }
 }

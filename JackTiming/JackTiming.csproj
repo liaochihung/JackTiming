@@ -86,6 +86,7 @@
     <Compile Include="Helper\TimingCharacterDrawer.cs" />
     <Compile Include="Helper\DialogService.cs" />
     <Compile Include="Helper\IDialogService.cs" />
+    <Compile Include="ViewModel\EditStatus.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="Helper\TimingMap.cs" />
     <Compile Include="Helper\TimingMapParser.cs" />

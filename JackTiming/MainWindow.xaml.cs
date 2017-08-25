@@ -19,8 +19,6 @@ namespace JackTiming
         {
             InitializeComponent();
 
-            //InitDrawParam();
-
             DrawParam.StartX = 50;
             DrawParam.StartY = 15;
 
@@ -68,14 +66,6 @@ namespace JackTiming
         {
             DrawParam.StartX = 50;
             DrawParam.StartY = 15;
-
-            //DrawParam.UnitX = 10;
-            //DrawParam.UnitY = 30;
-
-            //DrawParam.Margin = 10;
-
-            //DrawParam.VerticalSpace = 12;
-            //DrawParam.MarkHeight = 6;
         }
 
         private List<TimingMap> _timingDatas;
