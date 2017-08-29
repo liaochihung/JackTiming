@@ -73,6 +73,7 @@ namespace JackTiming
                     c.ToString(),
                     new Point(verticalLine.X1 - 2, verticalLine.Y1 + 5),
                     12,
+                    HorizontalAlignment.Left,
                     Brushes.Green);
 
                 Canvas.Children.Add(verticalLine);
@@ -89,6 +90,7 @@ namespace JackTiming
                 _timingMap.Symbol,
                 new Point(0, DrawParam.StartY + (_lineIndex * DrawParam.UnitY)),
                 14,
+                HorizontalAlignment.Left,
                 Brushes.Green);
 
             // draw elements
@@ -125,6 +127,7 @@ namespace JackTiming
                             new Point(element.TopLeftPoint.X,
                                 element.TopLeftPoint.Y),
                             14,
+                            HorizontalAlignment.Center,
                             Brushes.Black);
 
                     Canvas.Children.Add(line);
@@ -155,7 +158,13 @@ namespace JackTiming
                 if (_timingMap.Elements[i - 1].Lines == null)
                     continue;
 
+                if (_timingMap.Elements[i - 1].Lines.Count < 1)
+                    continue;
+
                 if (_timingMap.Elements[i].Lines == null)
+                    continue;
+
+                if (_timingMap.Elements[i].Lines.Count < 1)
                     continue;
 
                 var line = new Line

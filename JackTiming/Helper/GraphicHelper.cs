@@ -7,6 +7,9 @@ using System.Windows.Media.Imaging;
 
 namespace JackTiming
 {
+    /// <summary>
+    /// Functions about graphics process, all come from net.
+    /// </summary>
     public static class GraphicHelper
     {
         /// <summary>
@@ -66,7 +69,8 @@ namespace JackTiming
         // Position a label at the indicated point.
         public static void DrawText(Canvas can, string text, Point location,
             double font_size,
-            //HorizontalAlignment halign, VerticalAlignment valign, 
+            HorizontalAlignment halign, 
+            //VerticalAlignment valign, 
             Brush color)
         {
             // Make the label.
@@ -80,10 +84,10 @@ namespace JackTiming
             label.Measure(new Size(double.MaxValue, double.MaxValue));
 
             var x = location.X;
-            //if (halign == HorizontalAlignment.Center)
-            //    x -= label.DesiredSize.Width / 2;
-            //else if (halign == HorizontalAlignment.Right)
-            //    x -= label.DesiredSize.Width;
+            if (halign == HorizontalAlignment.Center)
+                x -= label.DesiredSize.Width / 2;
+            else if (halign == HorizontalAlignment.Right)
+                x -= label.DesiredSize.Width;
             Canvas.SetLeft(label, x);
 
             var y = location.Y;
