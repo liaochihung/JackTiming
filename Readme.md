@@ -10,3 +10,6 @@ Screen:
 
 ![screen1](/JackTiming/Images/Screen1.png)
 
+Vide code a web version:
+https://github.com/liaochihung/SimpleTimingDiagram
+![sample](https://github.com/liaochihung/SimpleTimingDiagram/blob/main/docs/sample.jpeg)
