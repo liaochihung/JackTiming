@@ -13,3 +13,5 @@ Screen:
 Vide code a web version:
 https://github.com/liaochihung/SimpleTimingDiagram
 ![sample](https://github.com/liaochihung/SimpleTimingDiagram/blob/main/docs/sample.jpeg)
+
+![Live Demo](https://liaochihung.github.io/SimpleTimingDiagram/)
